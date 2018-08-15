@@ -1,0 +1,17 @@
+# Script for cleaning DB schema and resetting DB early in project
+# when experimenting with structure. 
+
+#!/usr/bin/env bash
+printf "This will wipe the dev db!! Are your sure? (y/n) > "
+read OPT
+if [ "$OPT" = "y" ] ; then
+	if [ -f ./db/schema.rb ] ; then
+		echo "Deleting current schema"
+		rm ./db/schema.rb
+	fi
+
+	rails db:drop
+	rails db:create
+	rails db:migrate
+	rails db:seed
+fi
