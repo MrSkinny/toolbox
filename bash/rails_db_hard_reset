@@ -1,9 +1,17 @@
 #!/usr/bin/env bash
 
-# Script for cleaning DB schema and resetting DB early in project
+# Script for clearing DB schema and resetting DB early in project
 # when experimenting with structure. 
 
-printf "This will wipe the dev db!! Are your sure? (y/n) > "
+if [ ! -f ./bin/rails ] ; then
+	echo "No Rails binary found. Are you sure you're in a Rails project folder?";
+	exit 0;
+fi
+
+printf "You are currently in this directory: ";
+printf '%s\n' "${PWD##*/}";
+printf "\n";
+printf "This action will wipe the dev db!! Are your sure? (y/n) > "
 read OPT
 if [ "$OPT" = "y" ] ; then
 	if [ -f ./db/schema.rb ] ; then
@@ -11,8 +19,8 @@ if [ "$OPT" = "y" ] ; then
 		rm ./db/schema.rb
 	fi
 
-	rails db:drop
-	rails db:create
-	rails db:migrate
-	rails db:seed
+	bin/rails db:drop
+	bin/rails db:create
+	bin/rails db:migrate
+	bin/rails db:seed
 fi
